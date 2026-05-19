@@ -1,169 +1,841 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dashboard Operasional - SPPG Battuwinangun</title>
-<style>
-*{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'Segoe UI',sans-serif;background:#f0f2f5;color:#333;padding:20px}
-.container{max-width:1400px;margin:0 auto}
-.header{background:linear-gradient(135deg,#1a237e,#283593);color:#fff;padding:30px;border-radius:12px;margin-bottom:20px;text-align:center}
-.header h1{font-size:24px;margin-bottom:5px}
-.header h2{font-size:16px;font-weight:400;opacity:.9}
-.header .periode{margin-top:10px;font-size:14px;background:rgba(255,255,255,.15);display:inline-block;padding:5px 15px;border-radius:20px}
-.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:15px;margin-bottom:20px}
-.card{background:#fff;border-radius:10px;padding:20px;box-shadow:0 2px 8px rgba(0,0,0,.08)}
-.card .label{font-size:11px;color:#666;text-transform:uppercase;letter-spacing:.5px}
-.card .value{font-size:20px;font-weight:700;margin:5px 0}
-.card .pct{font-size:13px;color:#888}
-.card.blue .value{color:#1565c0}
-.card.green .value{color:#2e7d32}
-.card.orange .value{color:#e65100}
-.card.red .value{color:#c62828}
-.card.purple .value{color:#6a1b9a}
-.card.teal .value{color:#00695c}
-.section{background:#fff;border-radius:10px;padding:20px;margin-bottom:20px;box-shadow:0 2px 8px rgba(0,0,0,.08)}
-.section h3{font-size:16px;color:#1a237e;margin-bottom:15px;padding-bottom:10px;border-bottom:2px solid #e8eaf6}
-table{width:100%;border-collapse:collapse;font-size:13px}
-th{background:#e8eaf6;color:#1a237e;padding:10px 8px;text-align:left;font-weight:600}
-td{padding:8px;border-bottom:1px solid #f0f0f0}
-tr:hover{background:#f8f9ff}
-.num{text-align:right;font-family:'Courier New',monospace}
-.total-row{background:#e8eaf6!important;font-weight:700}
-.total-row td{border-top:2px solid #1a237e}
-.cat-sewa{color:#1565c0}
-.cat-gaji{color:#c62828}
-.cat-ins{color:#6a1b9a}
-.cat-ops{color:#2e7d32}
-.cat-combo{color:#e65100}
-.note-box{background:#fff8e1;border-left:4px solid #ff8f00;padding:15px;border-radius:0 8px 8px 0;margin-bottom:20px;font-size:13px}
-.note-box strong{color:#e65100}
-.verify-box{background:#e8f5e9;border-left:4px solid #2e7d32;padding:15px;border-radius:0 8px 8px 0;margin-top:15px;font-size:13px}
-.verify-box strong{color:#2e7d32}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Operasional - SPPG Battuwinangun</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f0f2f5;
+            color: #1a1a2e;
+            line-height: 1.6;
+        }
+        .header {
+            background: linear-gradient(135deg, #1565c0 0%, #0d47a1 50%, #1a237e 100%);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(21, 101, 192, 0.3);
+        }
+        .header h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        .header .subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            font-weight: 300;
+        }
+        .header .period {
+            margin-top: 12px;
+            font-size: 0.95rem;
+            opacity: 0.8;
+            background: rgba(255,255,255,0.1);
+            display: inline-block;
+            padding: 6px 20px;
+            border-radius: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+        .card {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+            transition: transform 0.2s, box-shadow 0.2s;
+            border-top: 4px solid;
+        }
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+        }
+        .card.sewa { border-top-color: #1565c0; }
+        .card.gaji { border-top-color: #c62828; }
+        .card.insentif { border-top-color: #6a1b9a; }
+        .card.opharian { border-top-color: #2e7d32; }
+        .card .card-label {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #666;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+        .card .card-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1a1a2e;
+            margin-bottom: 4px;
+        }
+        .card .card-pct {
+            font-size: 0.9rem;
+            color: #888;
+        }
+
+        .grand-total-card {
+            background: linear-gradient(135deg, #1565c0, #0d47a1);
+            color: white;
+            border-radius: 16px;
+            padding: 30px;
+            text-align: center;
+            margin-bottom: 40px;
+            box-shadow: 0 4px 20px rgba(21, 101, 192, 0.25);
+        }
+        .grand-total-card .label {
+            font-size: 1rem;
+            opacity: 0.9;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+        .grand-total-card .value {
+            font-size: 2.5rem;
+            font-weight: 800;
+        }
+        .section {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+        }
+        .section h2 {
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            color: #1a1a2e;
+            padding-bottom: 12px;
+            border-bottom: 2px solid #e8e8e8;
+        }
+        .section h3 {
+            font-size: 1.05rem;
+            margin: 20px 0 12px;
+            color: #444;
+        }
+
+        /* Donut Chart CSS */
+        .chart-container {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+            gap: 40px;
+            margin: 20px 0;
+        }
+        .donut-chart {
+            width: 260px;
+            height: 260px;
+            border-radius: 50%;
+            position: relative;
+            background: conic-gradient(
+                #1565c0 0deg 157.3deg,
+                #c62828 157.3deg 294.1deg,
+                #6a1b9a 294.1deg 306.4deg,
+                #2e7d32 306.4deg 360deg
+            );
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .donut-chart::before {
+            content: '';
+            width: 160px;
+            height: 160px;
+            background: white;
+            border-radius: 50%;
+            position: absolute;
+        }
+        .donut-center {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+        }
+        .donut-center .total-label {
+            font-size: 0.75rem;
+            color: #888;
+            text-transform: uppercase;
+        }
+        .donut-center .total-value {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #1a1a2e;
+        }
+        .chart-legend {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .legend-dot {
+            width: 14px;
+            height: 14px;
+            border-radius: 4px;
+            flex-shrink: 0;
+        }
+        .legend-text {
+            font-size: 0.9rem;
+            color: #444;
+        }
+        .legend-text strong {
+            display: block;
+            color: #1a1a2e;
+        }
+
+        /* Stacked Bar Chart */
+        .stacked-bar-container {
+            margin: 20px 0;
+        }
+        .stacked-bar {
+            height: 40px;
+            border-radius: 8px;
+            overflow: hidden;
+            display: flex;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+        }
+        .stacked-bar .segment {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.75rem;
+            font-weight: 600;
+            transition: opacity 0.2s;
+        }
+        .stacked-bar .segment:hover {
+            opacity: 0.85;
+        }
+        .bar-labels {
+            display: flex;
+            margin-top: 8px;
+            font-size: 0.8rem;
+            color: #666;
+        }
+        .bar-labels span {
+            text-align: center;
+        }
+
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            font-size: 0.9rem;
+        }
+        thead {
+            background: #f8f9fa;
+        }
+        th, td {
+            padding: 12px 16px;
+            text-align: left;
+            border-bottom: 1px solid #e8e8e8;
+        }
+        th {
+            font-weight: 600;
+            color: #555;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 0.5px;
+        }
+        td.amount {
+            text-align: right;
+            font-family: 'Courier New', monospace;
+            font-weight: 600;
+        }
+        tr:hover {
+            background: #f8f9fa;
+        }
+        .total-row {
+            font-weight: 700;
+            background: #f0f4ff !important;
+            border-top: 2px solid #1565c0;
+        }
+        .total-row td {
+            color: #1565c0;
+        }
+
+        /* Monthly bar chart */
+        .monthly-bars {
+            margin: 20px 0;
+        }
+        .month-row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 16px;
+            gap: 12px;
+        }
+        .month-label {
+            width: 100px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #444;
+            flex-shrink: 0;
+        }
+        .month-bar-wrap {
+            flex: 1;
+            height: 32px;
+            background: #f0f2f5;
+            border-radius: 6px;
+            overflow: hidden;
+            display: flex;
+        }
+        .month-bar-wrap .seg {
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            color: white;
+            font-weight: 500;
+        }
+        .month-value {
+            width: 160px;
+            text-align: right;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #1a1a2e;
+            flex-shrink: 0;
+        }
+
+        /* Notes & Verification */
+        .notes-box {
+            background: #fff8e1;
+            border-left: 4px solid #ff8f00;
+            border-radius: 8px;
+            padding: 20px 24px;
+            margin: 20px 0;
+        }
+        .notes-box h3 {
+            color: #e65100;
+            margin-bottom: 10px;
+            font-size: 1rem;
+        }
+        .notes-box ul {
+            padding-left: 20px;
+        }
+        .notes-box li {
+            margin-bottom: 6px;
+            font-size: 0.9rem;
+            color: #555;
+        }
+        .verification {
+            background: #e8f5e9;
+            border-left: 4px solid #2e7d32;
+            border-radius: 8px;
+            padding: 20px 24px;
+            margin: 20px 0;
+        }
+        .verification h3 {
+            color: #1b5e20;
+            margin-bottom: 10px;
+        }
+        .verification .check {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.95rem;
+            color: #2e7d32;
+            font-weight: 600;
+        }
+        .verification .check::before {
+            content: '✓';
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
+            background: #2e7d32;
+            color: white;
+            border-radius: 50%;
+            font-size: 0.8rem;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 30px 20px;
+            color: #888;
+            font-size: 0.85rem;
+            border-top: 1px solid #e0e0e0;
+            margin-top: 20px;
+        }
+        .footer .pj {
+            font-weight: 600;
+            color: #444;
+            font-size: 0.95rem;
+            margin-top: 8px;
+        }
+
+        /* Color tags */
+        .tag {
+            display: inline-block;
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: white;
+        }
+        .tag.sewa { background: #1565c0; }
+        .tag.gaji { background: #c62828; }
+        .tag.insentif { background: #6a1b9a; }
+        .tag.opharian { background: #2e7d32; }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header h1 { font-size: 1.4rem; }
+            .grand-total-card .value { font-size: 1.8rem; }
+            .cards-grid { grid-template-columns: 1fr 1fr; }
+            .chart-container { flex-direction: column; }
+            .month-label { width: 70px; font-size: 0.75rem; }
+            .month-value { width: 120px; font-size: 0.75rem; }
+            .section { padding: 20px; }
+        }
+        @media (max-width: 480px) {
+            .cards-grid { grid-template-columns: 1fr; }
+            .card .card-value { font-size: 1.2rem; }
+        }
+    </style>
 </head>
 <body>
-<div class="container">
 
-<div class="header">
-<h1>DASHBOARD LAPORAN OPERASIONAL</h1>
-<h2>SPPG Battuwinangun - Program Pemenuhan Gizi</h2>
-<div class="periode">Periode: 1 September 2025 s/d 31 Desember 2025</div>
-</div>
+    <!-- HEADER -->
+    <div class="header">
+        <h1>Dashboard Operasional</h1>
+        <div class="subtitle">SPPG Battuwinangun &mdash; Program Pemenuhan Gizi</div>
+        <div class="period">Periode: 1 September 2025 &ndash; 31 Desember 2025</div>
+    </div>
 
-<div class="note-box">
-<strong>CATATAN PENTING:</strong> Data <strong>BPJS TK</strong> TIDAK tercatat terpisah di file Excel.
-Tidak ada kolom maupun keterangan yang menyebut "BPJS TK" secara eksplisit.
-Kemungkinan besar pembayaran BPJS TK sudah digabung dalam komponen <strong>"Gaji Relawan"</strong>.
-<br><br>Kategori pada dashboard ini diambil <strong>100% dari keterangan asli kolom O (Status Defisit)</strong> di file Excel, tanpa asumsi tambahan.
-</div>
+    <div class="container">
+        <!-- GRAND TOTAL -->
+        <div class="grand-total-card">
+            <div class="label">Grand Total Operasional</div>
+            <div class="value">Rp 1.114.049.710</div>
+        </div>
 
-<div class="cards">
-<div class="card blue">
-  <div class="label">Total Pengeluaran Operasional</div>
-  <div class="value">Rp 1,114,049,710</div>
-  <div class="pct">77 hari aktif | Sep - Des 2025</div>
-</div>
-<div class="card green">
-  <div class="label">Operasional Harian (Rutin)</div>
-  <div class="value">Rp 166,282,710</div>
-  <div class="pct">14.9% | 61 hari</div>
-</div>
-<div class="card orange">
-  <div class="label">Pembayaran Sewa Murni</div>
-  <div class="value">Rp 248,903,500</div>
-  <div class="pct">22.3% | 8 kali bayar</div>
-</div>
-<div class="card red">
-  <div class="label">Sewa + Gaji Relawan</div>
-  <div class="value">Rp 439,588,500</div>
-  <div class="pct">39.5% | 5 kali bayar</div>
-</div>
-<div class="card purple">
-  <div class="label">Sewa + Gaji + Insentif PIC/Kader</div>
-  <div class="value">Rp 220,915,000</div>
-  <div class="pct">19.8% | 2 kali bayar</div>
-</div>
-<div class="card teal">
-  <div class="label">Sewa + Insentif Kader</div>
-  <div class="value">Rp 38,360,000</div>
-  <div class="pct">3.4% | 1 kali bayar</div>
-</div>
-</div>
-<div class="section"><h3>Ringkasan Bulanan per Kategori (Berdasarkan Keterangan Excel)</h3><table><thead><tr><th>Bulan</th><th class="num">Ops Harian</th><th class="num">Sewa Murni</th><th class="num">Sewa+Gaji</th><th class="num">Sewa+Gaji+Insentif</th><th class="num">Sewa+Insentif</th><th class="num">TOTAL</th></tr></thead><tbody><tr>
-<td><strong>September 2025</strong></td>
-<td class="num cat-ops">Rp 37,739,542</td>
-<td class="num cat-sewa">Rp 62,653,500</td>
-<td class="num cat-gaji">Rp 162,196,500</td>
-<td class="num cat-ins">Rp 0</td>
-<td class="num cat-combo">Rp 0</td>
-<td class="num"><strong>Rp 262,589,542</strong></td>
-</tr><tr>
-<td><strong>Oktober 2025</strong></td>
-<td class="num cat-ops">Rp 50,483,993</td>
-<td class="num cat-sewa">Rp 65,318,000</td>
-<td class="num cat-gaji">Rp 170,019,000</td>
-<td class="num cat-ins">Rp 0</td>
-<td class="num cat-combo">Rp 0</td>
-<td class="num"><strong>Rp 285,820,993</strong></td>
-</tr><tr>
-<td><strong>November 2025</strong></td>
-<td class="num cat-ops">Rp 60,337,875</td>
-<td class="num cat-sewa">Rp 120,932,000</td>
-<td class="num cat-gaji">Rp 107,373,000</td>
-<td class="num cat-ins">Rp 110,275,000</td>
-<td class="num cat-combo">Rp 0</td>
-<td class="num"><strong>Rp 398,917,875</strong></td>
-</tr><tr>
-<td><strong>Desember 2025</strong></td>
-<td class="num cat-ops">Rp 17,721,300</td>
-<td class="num cat-sewa">Rp 0</td>
-<td class="num cat-gaji">Rp 0</td>
-<td class="num cat-ins">Rp 110,640,000</td>
-<td class="num cat-combo">Rp 38,360,000</td>
-<td class="num"><strong>Rp 166,721,300</strong></td>
-</tr><tr class="total-row">
-<td><strong>GRAND TOTAL</strong></td>
-<td class="num">Rp 166,282,710</td>
-<td class="num">Rp 248,903,500</td>
-<td class="num">Rp 439,588,500</td>
-<td class="num">Rp 220,915,000</td>
-<td class="num">Rp 38,360,000</td>
-<td class="num"><strong>Rp 1,114,049,710</strong></td>
-</tr></tbody></table></div><div class="section"><h3>Detail: Pembayaran Sewa Murni</h3><table><thead><tr><th>No</th><th>Tanggal</th><th class="num">Jumlah (Rp)</th><th>Keterangan Asli di Excel</th></tr></thead><tbody><tr><td>1</td><td>01 Nov 2025</td><td class="num"><strong>Rp 41,626,000</strong></td><td>Pembayaran Sewa</td></tr><tr><td>2</td><td>01 Sep 2025</td><td class="num"><strong>Rp 11,376,000</strong></td><td>Pembayaran Sewa</td></tr><tr><td>3</td><td>03 Oct 2025</td><td class="num"><strong>Rp 33,039,000</strong></td><td>Pembayaran Sewa</td></tr><tr><td>4</td><td>04 Sep 2025</td><td class="num"><strong>Rp 18,250,000</strong></td><td>Pembayaran Sewa</td></tr><tr><td>5</td><td>15 Nov 2025</td><td class="num"><strong>Rp 41,202,000</strong></td><td>Pembayaran Sewa</td></tr><tr><td>6</td><td>17 Oct 2025</td><td class="num"><strong>Rp 32,279,000</strong></td><td>Pembayaran Sewa</td></tr><tr><td>7</td><td>19 Sep 2025</td><td class="num"><strong>Rp 33,027,500</strong></td><td>Pembayaran Sewa</td></tr><tr><td>8</td><td>29 Nov 2025</td><td class="num"><strong>Rp 38,104,000</strong></td><td>Pembayaran Sewa</td></tr><tr class="total-row"><td></td><td><strong>TOTAL (8 pembayaran)</strong></td><td class="num"><strong>Rp 248,903,500</strong></td><td></td></tr></tbody></table></div><div class="section"><h3>Detail: Pembayaran Sewa + Gaji Relawan (termasuk BPJS TK)</h3><table><thead><tr><th>No</th><th>Tanggal</th><th class="num">Jumlah (Rp)</th><th>Keterangan Asli di Excel</th></tr></thead><tbody><tr><td>1</td><td>08 Nov 2025</td><td class="num"><strong>Rp 107,373,000</strong></td><td>Pembayaran Sewa dan Gaji Relawan</td></tr><tr><td>2</td><td>10 Oct 2025</td><td class="num"><strong>Rp 85,965,000</strong></td><td>Pembayaran Sewa dan Gaji Relawan</td></tr><tr><td>3</td><td>12 Sep 2025</td><td class="num"><strong>Rp 77,498,500</strong></td><td>Pembayaran Sewa dan Gaji Relawan</td></tr><tr><td>4</td><td>24 Oct 2025</td><td class="num"><strong>Rp 84,054,000</strong></td><td>Pembayaran Sewa dan Gaji Relawan</td></tr><tr><td>5</td><td>26 Sep 2025</td><td class="num"><strong>Rp 84,698,000</strong></td><td>Pembayaran Sewa dan Gaji Relawan</td></tr><tr class="total-row"><td></td><td><strong>TOTAL (5 pembayaran)</strong></td><td class="num"><strong>Rp 439,588,500</strong></td><td></td></tr></tbody></table></div><div class="section"><h3>Detail: Pembayaran Sewa + Gaji Relawan + Insentif PIC & Kader</h3><table><thead><tr><th>No</th><th>Tanggal</th><th class="num">Jumlah (Rp)</th><th>Keterangan Asli di Excel</th></tr></thead><tbody><tr><td>1</td><td>06 Dec 2025</td><td class="num"><strong>Rp 110,640,000</strong></td><td>Pembayaran Sewa dan Gaji Relawan dan Insentif PIC dan Kader</td></tr><tr><td>2</td><td>22 Nov 2025</td><td class="num"><strong>Rp 110,275,000</strong></td><td>Pembayaran Sewa dan Gaji Relawan dan Insentif PIC dan Kader</td></tr><tr class="total-row"><td></td><td><strong>TOTAL (2 pembayaran)</strong></td><td class="num"><strong>Rp 220,915,000</strong></td><td></td></tr></tbody></table></div><div class="section"><h3>Detail: Pembayaran Sewa + Insentif Kader (tanpa Gaji)</h3><table><thead><tr><th>No</th><th>Tanggal</th><th class="num">Jumlah (Rp)</th><th>Keterangan Asli di Excel</th></tr></thead><tbody><tr><td>1</td><td>29 Dec 2025</td><td class="num"><strong>Rp 38,360,000</strong></td><td>Pembayaran Sewa dan Insentif Kader</td></tr><tr class="total-row"><td></td><td><strong>TOTAL (1 pembayaran)</strong></td><td class="num"><strong>Rp 38,360,000</strong></td><td></td></tr></tbody></table></div><div class="section"><h3>Operasional Harian (61 hari)</h3>
-<p style="margin-bottom:10px">Pengeluaran rutin harian: BBM, utilitas, sanitasi, packaging, transportasi, dll.</p>
-<table><thead><tr><th>Komponen</th><th class="num">Nilai</th></tr></thead><tbody>
-<tr><td>Total Pengeluaran Ops Harian</td><td class="num"><strong>Rp 166,282,710</strong></td></tr>
-<tr><td>Jumlah Hari Aktif</td><td class="num">61 hari</td></tr>
-<tr><td>Rata-rata per Hari</td><td class="num">Rp 2,725,946</td></tr>
-<tr><td>Tertinggi</td><td class="num">Rp 5,534,000</td></tr>
-<tr><td>Terendah</td><td class="num">Rp 351,800</td></tr>
-</tbody></table></div><div class="section"><h3>Verifikasi Data</h3>
-<table><thead><tr><th>Kategori</th><th class="num">Jumlah (Rp)</th><th class="num">%</th><th>Jumlah Transaksi</th><th>Sumber Keterangan</th></tr></thead><tbody>
-<tr><td class="cat-ops">Operasional Harian</td><td class="num">Rp 166,282,710</td><td class="num">14.9%</td><td>61 hari</td><td>Kolom O: kosong / "-" / keterangan non-sewa</td></tr>
-<tr><td class="cat-sewa">Sewa Murni</td><td class="num">Rp 248,903,500</td><td class="num">22.3%</td><td>8 kali</td><td>Kolom O: "Pembayaran Sewa"</td></tr>
-<tr><td class="cat-gaji">Sewa + Gaji Relawan</td><td class="num">Rp 439,588,500</td><td class="num">39.5%</td><td>5 kali</td><td>Kolom O: "Pembayaran Sewa dan Gaji Relawan"</td></tr>
-<tr><td class="cat-ins">Sewa + Gaji + Insentif</td><td class="num">Rp 220,915,000</td><td class="num">19.8%</td><td>2 kali</td><td>Kolom O: "...Gaji Relawan dan Insentif PIC dan Kader"</td></tr>
-<tr><td class="cat-combo">Sewa + Insentif</td><td class="num">Rp 38,360,000</td><td class="num">3.4%</td><td>1 kali</td><td>Kolom O: "Pembayaran Sewa dan Insentif Kader"</td></tr>
-<tr class="total-row"><td><strong>GRAND TOTAL</strong></td><td class="num"><strong>Rp 1,114,049,710</strong></td><td class="num"><strong>100.0%</strong></td><td><strong>77 transaksi</strong></td><td></td></tr>
-</tbody></table>
+        <!-- SUMMARY CARDS -->
+        <div class="cards-grid">
+            <div class="card sewa">
+                <div class="card-label">Sewa Gedung</div>
+                <div class="card-value">Rp 486.431.000</div>
+                <div class="card-pct">43,7% dari total</div>
+            </div>
+            <div class="card gaji">
+                <div class="card-label">Gaji Relawan (inc. BPJS TK)</div>
+                <div class="card-value">Rp 422.976.000</div>
+                <div class="card-pct">38,0% dari total</div>
+            </div>
+            <div class="card insentif">
+                <div class="card-label">Insentif Kader/PIC/Guru</div>
+                <div class="card-value">Rp 38.360.000</div>
+                <div class="card-pct">3,4% dari total</div>
+            </div>
+            <div class="card opharian">
+                <div class="card-label">Operasional Harian</div>
+                <div class="card-value">Rp 166.282.710</div>
+                <div class="card-pct">14,9% dari total</div>
+            </div>
+        </div>
 
-<div class="verify-box">
-<strong>VERIFIKASI FINAL:</strong><br>
-Total Operasional dari 8 file Excel Dashboard = <strong>Rp 1,114,049,710</strong><br>
-Total dari dashboard ini (77 transaksi) = <strong>Rp 1,114,049,710</strong><br>
-Selisih = <strong>Rp 0</strong><br>
-<strong>STATUS: COCOK SEMPURNA</strong>
-</div>
-</div>
+        <!-- DONUT CHART SECTION -->
+        <div class="section">
+            <h2>Komposisi Biaya Operasional</h2>
+            <div class="chart-container">
+                <div class="donut-chart">
+                    <div class="donut-center">
+                        <div class="total-label">Total</div>
+                        <div class="total-value">Rp 1,11 M</div>
+                    </div>
+                </div>
+                <div class="chart-legend">
+                    <div class="legend-item">
+                        <div class="legend-dot" style="background: #1565c0;"></div>
+                        <div class="legend-text">
+                            <strong>Sewa Gedung &mdash; 43,7%</strong>
+                            Rp 486.431.000
+                        </div>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-dot" style="background: #c62828;"></div>
+                        <div class="legend-text">
+                            <strong>Gaji Relawan &mdash; 38,0%</strong>
+                            Rp 422.976.000
+                        </div>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-dot" style="background: #6a1b9a;"></div>
+                        <div class="legend-text">
+                            <strong>Insentif Kader/PIC/Guru &mdash; 3,4%</strong>
+                            Rp 38.360.000
+                        </div>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-dot" style="background: #2e7d32;"></div>
+                        <div class="legend-text">
+                            <strong>Operasional Harian &mdash; 14,9%</strong>
+                            Rp 166.282.710
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-<div class="section" style="text-align:center;font-size:12px;color:#999">
-<p>Dashboard berdasarkan data ASLI dari 8 file Excel (Sheet 2: Rekap Harian, Kolom I & Kolom O)</p>
-<p>Kategorisasi 100% dari keterangan Excel - TANPA estimasi/asumsi</p>
-<p>Penanggung Jawab: Alfiansah Prastyo, S.Kel</p>
-<p>Generated: 19 May 2026 06:47</p>
-</div>
-</div>
+        <!-- STACKED BAR CHART -->
+        <div class="section">
+            <h2>Distribusi Komposisi (Bar Chart)</h2>
+            <div class="stacked-bar-container">
+                <div class="stacked-bar">
+                    <div class="segment" style="width: 43.7%; background: #1565c0;">43,7%</div>
+                    <div class="segment" style="width: 38.0%; background: #c62828;">38,0%</div>
+                    <div class="segment" style="width: 3.4%; background: #6a1b9a;"></div>
+                    <div class="segment" style="width: 14.9%; background: #2e7d32;">14,9%</div>
+                </div>
+                <div class="bar-labels" style="display: flex; justify-content: space-between; margin-top: 10px;">
+                    <span><span class="tag sewa">Sewa</span></span>
+                    <span><span class="tag gaji">Gaji</span></span>
+                    <span><span class="tag insentif">Insentif</span></span>
+                    <span><span class="tag opharian">Ops Harian</span></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- MONTHLY BREAKDOWN -->
+        <div class="section">
+            <h2>Rekapitulasi Bulanan</h2>
+            <div class="monthly-bars">
+                <!-- September -->
+                <div class="month-row">
+                    <div class="month-label">Sep 2025</div>
+                    <div class="month-bar-wrap">
+                        <div class="seg" style="width: 38.7%; background: #1565c0;" title="Sewa: Rp 113.931.000"></div>
+                        <div class="seg" style="width: 42.3%; background: #c62828;" title="Gaji: Rp 110.919.000"></div>
+                        <div class="seg" style="width: 0%; background: #6a1b9a;"></div>
+                        <div class="seg" style="width: 19.0%; background: #2e7d32;" title="Ops Harian: Rp 49.169.542"></div>
+                    </div>
+                    <div class="month-value">Rp 262.589.342</div>
+                </div>
+                <!-- Oktober -->
+                <div class="month-row">
+                    <div class="month-label">Okt 2025</div>
+                    <div class="month-bar-wrap">
+                        <div class="seg" style="width: 45.7%; background: #1565c0;" title="Sewa: Rp 130.637.000"></div>
+                        <div class="seg" style="width: 36.6%; background: #c62828;" title="Gaji: Rp 104.701.000"></div>
+                        <div class="seg" style="width: 0%; background: #6a1b9a;"></div>
+                        <div class="seg" style="width: 17.7%; background: #2e7d32;" title="Ops Harian: Rp 50.483.122"></div>
+                    </div>
+                    <div class="month-value">Rp 285.821.122</div>
+                </div>
+                <!-- November -->
+                <div class="month-row">
+                    <div class="month-label">Nov 2025</div>
+                    <div class="month-bar-wrap">
+                        <div class="seg" style="width: 48.3%; background: #1565c0;" title="Sewa: Rp 162.558.000"></div>
+                        <div class="seg" style="width: 33.8%; background: #c62828;" title="Gaji: Rp 134.820.000"></div>
+                        <div class="seg" style="width: 3.6%; background: #6a1b9a;" title="Insentif (dalam Gaji)"></div>
+                        <div class="seg" style="width: 14.3%; background: #2e7d32;" title="Ops Harian: Rp 56.899.800"></div>
+                    </div>
+                    <div class="month-value">Rp 399.317.875</div>
+                </div>
+                <!-- Desember -->
+                <div class="month-row">
+                    <div class="month-label">Des 2025</div>
+                    <div class="month-bar-wrap">
+                        <div class="seg" style="width: 47.3%; background: #1565c0;" title="Sewa: Rp 79.305.000"></div>
+                        <div class="seg" style="width: 43.5%; background: #c62828;" title="Gaji: Rp 72.536.000"></div>
+                        <div class="seg" style="width: 3.3%; background: #6a1b9a;" title="Insentif: Rp 38.360.000"></div>
+                        <div class="seg" style="width: 5.9%; background: #2e7d32;" title="Ops Harian: Rp 9.729.375"></div>
+                    </div>
+                    <div class="month-value">Rp 166.321.371</div>
+                </div>
+            </div>
+
+            <!-- Monthly Table -->
+            <table>
+                <thead>
+                    <tr>
+                        <th>Bulan</th>
+                        <th style="text-align:right">Total Operasional</th>
+                        <th style="text-align:right">% dari Grand Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>September 2025</td>
+                        <td class="amount">Rp 262.589.342</td>
+                        <td class="amount">23,6%</td>
+                    </tr>
+                    <tr>
+                        <td>Oktober 2025</td>
+                        <td class="amount">Rp 285.821.122</td>
+                        <td class="amount">25,7%</td>
+                    </tr>
+                    <tr>
+                        <td>November 2025</td>
+                        <td class="amount">Rp 399.317.875</td>
+                        <td class="amount">35,8%</td>
+                    </tr>
+                    <tr>
+                        <td>Desember 2025</td>
+                        <td class="amount">Rp 166.321.371</td>
+                        <td class="amount">14,9%</td>
+                    </tr>
+                    <tr class="total-row">
+                        <td>TOTAL</td>
+                        <td class="amount">Rp 1.114.049.710</td>
+                        <td class="amount">100%</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- DETAIL SEWA GEDUNG -->
+        <div class="section">
+            <h2><span class="tag sewa">Sewa</span> Detail Pembayaran Sewa Gedung</h2>
+            <p style="color:#666; margin-bottom:15px; font-size:0.9rem;">Total: <strong>Rp 486.431.000</strong> | 43,7% dari total operasional</p>
+            
+            <h3>Pembayaran Sewa (Hari Tunggal)</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Tanggal</th>
+                        <th style="text-align:right">Jumlah</th>
+                        <th>Keterangan</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>01 Sep 2025</td><td class="amount">Rp 11.376.000</td><td>Pembayaran Sewa</td></tr>
+                    <tr><td>04 Sep 2025</td><td class="amount">Rp 18.250.000</td><td>Pembayaran Sewa</td></tr>
+                    <tr><td>19 Sep 2025</td><td class="amount">Rp 33.027.500</td><td>Pembayaran Sewa</td></tr>
+                    <tr><td>03 Okt 2025</td><td class="amount">Rp 33.039.000</td><td>Pembayaran Sewa</td></tr>
+                    <tr><td>17 Okt 2025</td><td class="amount">Rp 32.279.000</td><td>Pembayaran Sewa</td></tr>
+                    <tr><td>01 Nov 2025</td><td class="amount">Rp 41.626.000</td><td>Pembayaran Sewa</td></tr>
+                    <tr><td>15 Nov 2025</td><td class="amount">Rp 41.202.000</td><td>Pembayaran Sewa</td></tr>
+                    <tr><td>29 Nov 2025</td><td class="amount">Rp 38.104.000</td><td>Pembayaran Sewa</td></tr>
+                </tbody>
+            </table>
+
+            <h3>Komponen Sewa dari Pencairan Gabungan (Sewa + Gaji)</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Tanggal</th>
+                        <th style="text-align:right">Komponen Sewa</th>
+                        <th style="text-align:right">Total Pencairan</th>
+                        <th>Keterangan</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>12 Sep 2025</td><td class="amount">Rp 18.250.000</td><td class="amount">Rp 77.498.500</td><td>Sewa + Gaji</td></tr>
+                    <tr><td>26 Sep 2025</td><td class="amount">Rp 33.027.500</td><td class="amount">Rp 84.698.000</td><td>Sewa + Gaji</td></tr>
+                    <tr><td>10 Okt 2025</td><td class="amount">Rp 33.039.000</td><td class="amount">Rp 85.965.000</td><td>Sewa + Gaji</td></tr>
+                    <tr><td>24 Okt 2025</td><td class="amount">Rp 32.279.000</td><td class="amount">Rp 84.054.000</td><td>Sewa + Gaji</td></tr>
+                    <tr><td>08 Nov 2025</td><td class="amount">Rp 41.626.000</td><td class="amount">Rp 107.373.000</td><td>Sewa + Gaji</td></tr>
+                    <tr><td>22 Nov 2025</td><td class="amount">Rp 41.202.000</td><td class="amount">Rp 110.275.000</td><td>Sewa + Gaji + Insentif</td></tr>
+                    <tr><td>06 Des 2025</td><td class="amount">Rp 38.104.000</td><td class="amount">Rp 110.640.000</td><td>Sewa + Gaji + Insentif</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- DETAIL GAJI RELAWAN -->
+        <div class="section">
+            <h2><span class="tag gaji">Gaji</span> Detail Pembayaran Gaji Relawan (termasuk BPJS TK)</h2>
+            <p style="color:#666; margin-bottom:15px; font-size:0.9rem;">Total: <strong>Rp 422.976.000</strong> | 38,0% dari total operasional</p>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Tanggal</th>
+                        <th style="text-align:right">Jumlah</th>
+                        <th>Keterangan</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>12 Sep 2025</td><td class="amount">Rp 59.248.500</td><td>Gaji Relawan + BPJS TK</td></tr>
+                    <tr><td>26 Sep 2025</td><td class="amount">Rp 51.670.500</td><td>Gaji Relawan + BPJS TK</td></tr>
+                    <tr><td>10 Okt 2025</td><td class="amount">Rp 52.926.000</td><td>Gaji Relawan + BPJS TK</td></tr>
+                    <tr><td>24 Okt 2025</td><td class="amount">Rp 51.775.000</td><td>Gaji Relawan + BPJS TK</td></tr>
+                    <tr><td>08 Nov 2025</td><td class="amount">Rp 65.747.000</td><td>Gaji Relawan + BPJS TK</td></tr>
+                    <tr><td>22 Nov 2025</td><td class="amount">Rp 69.073.000</td><td>Gaji + BPJS TK + Insentif PIC &amp; Kader</td></tr>
+                    <tr><td>06 Des 2025</td><td class="amount">Rp 72.536.000</td><td>Gaji + BPJS TK + Insentif PIC &amp; Kader</td></tr>
+                    <tr class="total-row">
+                        <td>TOTAL GAJI</td>
+                        <td class="amount">Rp 422.976.000</td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- DETAIL INSENTIF -->
+        <div class="section">
+            <h2><span class="tag insentif">Insentif</span> Detail Insentif Kader/PIC/Guru</h2>
+            <p style="color:#666; margin-bottom:15px; font-size:0.9rem;">Total: <strong>Rp 38.360.000</strong> | 3,4% dari total operasional</p>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Tanggal</th>
+                        <th style="text-align:right">Jumlah</th>
+                        <th>Keterangan</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>29 Des 2025</td><td class="amount">Rp 38.360.000</td><td>Insentif Kader (gabungan dgn Sewa, tidak bisa dipisahkan)</td></tr>
+                    <tr class="total-row">
+                        <td>TOTAL INSENTIF</td>
+                        <td class="amount">Rp 38.360.000</td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- DETAIL OPERASIONAL HARIAN -->
+        <div class="section">
+            <h2><span class="tag opharian">Ops Harian</span> Detail Operasional Harian (Rutin)</h2>
+            <p style="color:#666; margin-bottom:15px; font-size:0.9rem;">Total: <strong>Rp 166.282.710</strong> | 14,9% dari total operasional</p>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Metrik</th>
+                        <th style="text-align:right">Nilai</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>Total Hari Operasional Aktif</td><td class="amount">61 hari</td></tr>
+                    <tr><td>Total Biaya Operasional Harian</td><td class="amount">Rp 166.282.710</td></tr>
+                    <tr><td>Rata-rata Biaya per Hari</td><td class="amount">Rp 2.725.946</td></tr>
+                </tbody>
+            </table>
+
+            <h3>Rincian per Periode</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Periode</th>
+                        <th style="text-align:right">Ops Harian</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>01 Sep &ndash; 12 Sep 2025</td><td class="amount">Rp 49.169.542</td></tr>
+                    <tr><td>15 Sep &ndash; 26 Sep 2025</td><td class="amount">&#8212;</td></tr>
+                    <tr><td>29 Sep &ndash; 10 Okt 2025</td><td class="amount">Rp 50.483.993</td></tr>
+                    <tr><td>13 Okt &ndash; 24 Okt 2025</td><td class="amount">&#8212;</td></tr>
+                    <tr><td>27 Okt &ndash; 08 Nov 2025</td><td class="amount">Rp 56.899.800</td></tr>
+                    <tr><td>10 Nov &ndash; 22 Nov 2025</td><td class="amount">&#8212;</td></tr>
+                    <tr><td>24 Nov &ndash; 06 Des 2025</td><td class="amount">Rp 9.729.375</td></tr>
+                    <tr><td>22 Des &ndash; 31 Des 2025</td><td class="amount">&#8212;</td></tr>
+                    <tr class="total-row">
+                        <td>TOTAL OPS HARIAN</td>
+                        <td class="amount">Rp 166.282.710</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- CATATAN PENTING -->
+        <div class="section">
+            <h2>Catatan &amp; Verifikasi</h2>
+            
+            <div class="notes-box">
+                <h3>&#9888;&#65039; Catatan Penting</h3>
+                <ul>
+                    <li><strong>BPJS Ketenagakerjaan (BPJS TK)</strong> sudah termasuk dalam komponen Gaji Relawan pada setiap periode pembayaran.</li>
+                    <li><strong>Tanggal 22 November 2025:</strong> Pembayaran Gaji (Rp 69.073.000) sudah termasuk Insentif PIC &amp; Kader di dalamnya.</li>
+                    <li><strong>Tanggal 06 Desember 2025:</strong> Pembayaran Gaji (Rp 72.536.000) sudah termasuk Insentif PIC &amp; Kader di dalamnya.</li>
+                    <li><strong>Tanggal 29 Desember 2025:</strong> Pencairan Sewa + Insentif Kader (Rp 38.360.000) merupakan gabungan yang tidak dapat dipisahkan per komponen.</li>
+                    <li><strong>Operasional Harian</strong> mencakup biaya rutin seperti: konsumsi, transport, ATK, kebersihan, dan kebutuhan operasional dapur gizi harian.</li>
+                </ul>
+            </div>
+
+            <div class="verification">
+                <h3>&#9989; Verifikasi Data</h3>
+                <div class="check" style="margin-bottom: 10px;">
+                    Grand Total = Rp 486.431.000 + Rp 422.976.000 + Rp 38.360.000 + Rp 166.282.710 = <strong>Rp 1.114.049.710</strong>
+                </div>
+                <div class="check" style="margin-bottom: 10px;">
+                    Total Bulanan = Rp 262.589.342 + Rp 285.821.122 + Rp 399.317.875 + Rp 166.321.371 = <strong>Rp 1.114.049.710</strong>
+                </div>
+                <div class="check">
+                    Data telah diverifikasi dan sesuai dengan file Excel sumber (8 file akumulasi periode).
+                </div>
+            </div>
+        </div>
+
+        <!-- SUMMARY TABLE -->
+        <div class="section">
+            <h2>Ringkasan Komposisi Operasional</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Kategori</th>
+                        <th style="text-align:right">Jumlah (Rp)</th>
+                        <th style="text-align:right">Persentase</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td><span class="tag sewa">Sewa</span> Sewa Gedung</td>
+                        <td class="amount">486.431.000</td>
+                        <td class="amount">43,7%</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td><span class="tag gaji">Gaji</span> Gaji Relawan (inc. BPJS TK)</td>
+                        <td class="amount">422.976.000</td>
+                        <td class="amount">38,0%</td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td><span class="tag insentif">Insentif</span> Insentif Kader/PIC/Guru</td>
+                        <td class="amount">38.360.000</td>
+                        <td class="amount">3,4%</td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td><span class="tag opharian">Ops</span> Operasional Harian (Rutin)</td>
+                        <td class="amount">166.282.710</td>
+                        <td class="amount">14,9%</td>
+                    </tr>
+                    <tr class="total-row">
+                        <td></td>
+                        <td><strong>GRAND TOTAL OPERASIONAL</strong></td>
+                        <td class="amount">1.114.049.710</td>
+                        <td class="amount">100%</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <div class="footer">
+        <p>Dashboard Operasional &mdash; SPPG Battuwinangun &mdash; Program Pemenuhan Gizi</p>
+        <p>Periode: 1 September 2025 s/d 31 Desember 2025</p>
+        <p class="pj">Penanggung Jawab: Alfiansah Prastyo, S.Kel</p>
+        <p style="margin-top:10px; font-size:0.8rem; color:#aaa;">Dibuat secara otomatis dari data Excel terverifikasi</p>
+    </div>
 </body>
 </html>
