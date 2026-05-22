@@ -626,14 +626,15 @@ function buildReportHTMLForPDF(r) {
     }).join('');
   }
 
-  // Photo section - IMPORTANT: use full base64 src for html2canvas
+  // Photo section - use explicit max-height to prevent overflow
   var photos = (r.foto || []).slice(0, 4);
   var photoHtml = '';
   if (photos.length > 0) {
-    var w = photos.length === 1 ? '100%' : photos.length === 2 ? '48%' : '31%';
+    var w = photos.length === 1 ? '360px' : photos.length === 2 ? '340px' : '230px';
+    var h = photos.length === 1 ? '240px' : '180px';
     photoHtml = '<div style="font-size:13px;font-weight:700;margin:16px 0 8px;color:#4f46e5">Foto Makanan</div><div style="display:flex;flex-wrap:wrap;gap:8px">';
     photos.forEach(function(src) {
-      photoHtml += '<div style="width:' + w + ';border-radius:8px;overflow:hidden;border:1px solid #cbd5e1"><img src="' + src + '" style="width:100%;height:auto;display:block" crossorigin="anonymous"/></div>';
+      photoHtml += '<div style="width:' + w + ';height:' + h + ';border-radius:8px;overflow:hidden;border:1px solid #cbd5e1"><img src="' + src + '" style="width:100%;height:100%;object-fit:cover;display:block"/></div>';
     });
     photoHtml += '</div>';
   }
