@@ -698,15 +698,16 @@ td .input, td .select { padding: 8px 10px; font-size: 13px; }
   }
 }
 
-/* PDF print container - hidden on screen */
+/* PDF print container - hidden on screen but rendered */
 .pdf-render {
   position: fixed;
-  left: -10000px;
+  left: -9999px;
   top: 0;
   width: 794px;
   background: #fff;
   color: #0f172a;
   font-family: 'Inter', sans-serif;
+  overflow: visible;
 }
 
 /* ============================================

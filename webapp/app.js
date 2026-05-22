@@ -730,26 +730,30 @@ function addCanvasToPDF(pdf, canvas, isFirstPage) {
   var imgHeight = (canvas.height * imgWidth) / canvas.width;
 
   if (imgHeight <= pageHeight) {
-    // Fits on one page
     if (!isFirstPage) pdf.addPage();
     pdf.addImage(canvas.toDataURL('image/jpeg', 0.92), 'JPEG', 0, 0, imgWidth, imgHeight);
   } else {
-    // Need to slice canvas into multiple pages
-    var pxPerPage = Math.floor(canvas.width * (pageHeight / imgWidth));
+    // Calculate how many canvas pixels fit in one A4 page
+    // ratio: 1 canvas pixel = (imgWidth / canvas.width) mm = (pageWidth / canvas.width) mm
+    // So pixels per page = pageHeight / (pageWidth / canvas.width) = pageHeight * canvas.width / pageWidth
+    var pxPerMM = canvas.width / pageWidth;
+    var pxPerPage = Math.floor(pageHeight * pxPerMM);
     var totalPages = Math.ceil(canvas.height / pxPerPage);
+    var imgData = canvas.toDataURL('image/jpeg', 0.92);
 
     for (var p = 0; p < totalPages; p++) {
       if (p > 0 || !isFirstPage) pdf.addPage();
 
-      var sliceHeight = Math.min(pxPerPage, canvas.height - p * pxPerPage);
+      var yStart = p * pxPerPage;
+      var sliceH = Math.min(pxPerPage, canvas.height - yStart);
       var sliceCanvas = document.createElement('canvas');
       sliceCanvas.width = canvas.width;
-      sliceCanvas.height = sliceHeight;
+      sliceCanvas.height = sliceH;
       var ctx = sliceCanvas.getContext('2d');
-      ctx.drawImage(canvas, 0, p * pxPerPage, canvas.width, sliceHeight, 0, 0, canvas.width, sliceHeight);
+      ctx.drawImage(canvas, 0, yStart, canvas.width, sliceH, 0, 0, canvas.width, sliceH);
 
-      var sliceImgHeight = (sliceHeight * imgWidth) / canvas.width;
-      pdf.addImage(sliceCanvas.toDataURL('image/jpeg', 0.92), 'JPEG', 0, 0, imgWidth, sliceImgHeight);
+      var sliceMmHeight = sliceH / pxPerMM;
+      pdf.addImage(sliceCanvas.toDataURL('image/jpeg', 0.92), 'JPEG', 0, 0, imgWidth, sliceMmHeight);
     }
   }
 }
