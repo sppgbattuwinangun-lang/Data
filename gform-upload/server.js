@@ -1,11 +1,22 @@
 const http = require('http');
 const fs = require('fs');
 const path = require('path');
+const { exec } = require('child_process');
 const { randomUUID } = require('crypto');
 
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 const UPLOAD_DIR = path.join(__dirname, 'uploads');
 const DATA_FILE = path.join(__dirname, 'submissions.json');
+
+// Auto-buka browser kalau jalan di komputer lokal (bukan di Render/cloud)
+function openBrowser(url) {
+    const isCloud = process.env.PORT || process.env.RENDER || process.env.VERCEL || process.env.HEROKU;
+    if (isCloud) return;
+    const cmd = process.platform === 'win32' ? `start "" "${url}"`
+              : process.platform === 'darwin' ? `open "${url}"`
+              : `xdg-open "${url}"`;
+    exec(cmd, () => {}); // silent
+}
 
 // Pastikan folder uploads ada
 if (!fs.existsSync(UPLOAD_DIR)) {
@@ -247,11 +258,16 @@ const server = http.createServer((req, res) => {
 });
 
 server.listen(PORT, () => {
+    const url = `http://localhost:${PORT}`;
     console.log('');
     console.log('=========================================');
     console.log('  Form Upload Sekolah (GForm-style)');
     console.log('=========================================');
-    console.log(`  Form     : http://localhost:${PORT}`);
-    console.log(`  Admin    : http://localhost:${PORT}/admin`);
+    console.log(`  Form     : ${url}`);
+    console.log(`  Admin    : ${url}/admin`);
     console.log('=========================================');
+    console.log('  Membuka browser otomatis...');
+    console.log('  (Tekan Ctrl+C untuk berhenti)');
+    console.log('');
+    setTimeout(() => openBrowser(url), 500);
 });
