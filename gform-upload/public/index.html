@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form Upload Dokumen Sekolah</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <div class="page">
+        <!-- FORM SCREEN -->
+        <div id="formScreen" class="form-card">
+            <div class="form-header">
+                <h1>Form Upload Dokumen Sekolah</h1>
+                <p class="form-desc">Silakan upload dokumen (PDF/JPG) beserta nama sekolah Anda.</p>
+                <p class="required-note"><span class="required">*</span> Wajib diisi</p>
+            </div>
+
+            <form id="uploadForm" novalidate>
+                <!-- Nama Sekolah -->
+                <div class="question-card">
+                    <label class="question-title">
+                        Nama Sekolah <span class="required">*</span>
+                    </label>
+                    <input
+                        type="text"
+                        id="namaSekolah"
+                        name="nama_sekolah"
+                        class="question-input"
+                        placeholder="Tulis jawaban Anda"
+                        required
+                    >
+                </div>
+
+                <!-- Upload File -->
+                <div class="question-card">
+                    <label class="question-title">
+                        Upload Dokumen (PDF / JPG) <span class="required">*</span>
+                    </label>
+                    <p class="question-hint">Maksimal ukuran file 10 MB. Hanya format PDF, JPG, atau JPEG.</p>
+
+                    <label for="fileInput" class="file-button">
+                        <span class="file-button-icon">+</span>
+                        <span>Tambah file</span>
+                    </label>
+                    <input
+                        type="file"
+                        id="fileInput"
+                        name="file"
+                        accept=".pdf,.jpg,.jpeg"
+                        hidden
+                        required
+                    >
+
+                    <div id="filePreview" class="file-chip" style="display:none;">
+                        <span class="file-chip-icon" id="fileIcon">📄</span>
+                        <span class="file-chip-name" id="fileName"></span>
+                        <span class="file-chip-size" id="fileSize"></span>
+                        <button type="button" id="removeFile" class="file-chip-remove" title="Hapus">✕</button>
+                    </div>
+                </div>
+
+                <!-- Error Alert -->
+                <div id="alertError" class="alert-error" style="display:none;"></div>
+
+                <!-- Actions -->
+                <div class="form-actions">
+                    <button type="submit" class="btn-submit" id="submitBtn">
+                        <span class="btn-text">Kirim</span>
+                        <span class="btn-loading" style="display:none;">Mengirim...</span>
+                    </button>
+                </div>
+            </form>
+
+            <p class="form-footer">
+                Jangan kirimkan kata sandi melalui form ini.
+            </p>
+        </div>
+
+        <!-- THANK YOU SCREEN -->
+        <div id="thankScreen" class="form-card" style="display:none;">
+            <div class="thank-icon">✓</div>
+            <h1>Terima kasih!</h1>
+            <p class="thank-msg">
+                Dokumen dari <strong id="thankSchool"></strong> berhasil dikirim.
+            </p>
+            <p class="thank-sub">Tanggapan Anda telah kami terima.</p>
+            <div class="form-actions">
+                <button type="button" class="btn-link" id="newResponse">
+                    Kirim tanggapan lain
+                </button>
+            </div>
+        </div>
+
+        <p class="page-footer">
+            Form ini dibuat untuk pengumpulan dokumen sekolah.
+        </p>
+    </div>
+
+    <script src="/app.js"></script>
+</body>
+</html>

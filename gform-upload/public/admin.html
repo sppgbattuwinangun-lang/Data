@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Daftar Tanggapan</title>
+    <link rel="stylesheet" href="/styles.css">
+    <style>
+        body { background: #f5f5f5; }
+        .admin-card {
+            max-width: 1000px;
+            margin: 24px auto;
+            background: white;
+            border-radius: 8px;
+            padding: 24px;
+            border-top: 10px solid #673ab7;
+            border: 1px solid #dadce0;
+        }
+        .admin-card h1 {
+            font-size: 24px;
+            font-weight: 400;
+            margin-bottom: 4px;
+            color: #202124;
+        }
+        .admin-card .subtitle {
+            color: #5f6368;
+            margin-bottom: 20px;
+        }
+        .admin-stats {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        .admin-stat {
+            background: #f8f4ff;
+            border: 1px solid #e0d4f5;
+            padding: 12px 18px;
+            border-radius: 8px;
+            min-width: 120px;
+        }
+        .admin-stat .label {
+            font-size: 12px;
+            color: #5f6368;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+        .admin-stat .value {
+            font-size: 22px;
+            font-weight: 500;
+            color: #673ab7;
+        }
+        table.admin-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+        .admin-table thead th {
+            background: #f8f9fa;
+            padding: 10px;
+            text-align: left;
+            border-bottom: 2px solid #dadce0;
+            font-weight: 500;
+            color: #5f6368;
+        }
+        .admin-table tbody td {
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        .admin-table tbody tr:hover {
+            background: #fafafa;
+        }
+        .badge {
+            display: inline-block;
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+        .badge-pdf { background: #fce8e6; color: #c5221f; }
+        .badge-jpg { background: #e8f0fe; color: #1967d2; }
+        .btn-dl {
+            background: #673ab7;
+            color: white;
+            border: none;
+            padding: 6px 14px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 13px;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .btn-dl:hover {
+            background: #5e35b1;
+        }
+        .empty {
+            text-align: center;
+            padding: 40px;
+            color: #999;
+        }
+        .controls {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+        .controls input {
+            flex: 1;
+            padding: 8px 12px;
+            border: 1px solid #dadce0;
+            border-radius: 4px;
+            font-size: 14px;
+            outline: none;
+        }
+        .controls input:focus { border-color: #673ab7; }
+        .controls a {
+            background: #1a73e8;
+            color: white;
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-card">
+        <h1>Daftar Tanggapan</h1>
+        <p class="subtitle">Semua dokumen yang dikirim melalui form upload.</p>
+
+        <div class="admin-stats" id="stats"></div>
+
+        <div class="controls">
+            <input type="text" id="search" placeholder="Cari nama sekolah atau file..." />
+            <a href="/api/download-all" id="dlAll">⬇ Download Semua (ZIP)</a>
+        </div>
+
+        <div id="content"></div>
+    </div>
+
+    <script>
+        let allFiles = [];
+
+        async function load() {
+            const res = await fetch('/api/files');
+            allFiles = await res.json();
+            allFiles.sort((a, b) => new Date(b.uploadDate) - new Date(a.uploadDate));
+            renderStats();
+            render();
+        }
+
+        function renderStats() {
+            const total = allFiles.length;
+            const pdf = allFiles.filter(f => f.fileType === 'PDF').length;
+            const jpg = total - pdf;
+            const schools = new Set(allFiles.map(f => f.namaSekolah)).size;
+            document.getElementById('stats').innerHTML = `
+                <div class="admin-stat"><div class="label">Total</div><div class="value">${total}</div></div>
+                <div class="admin-stat"><div class="label">PDF</div><div class="value">${pdf}</div></div>
+                <div class="admin-stat"><div class="label">JPG</div><div class="value">${jpg}</div></div>
+                <div class="admin-stat"><div class="label">Sekolah</div><div class="value">${schools}</div></div>
+            `;
+        }
+
+        function render() {
+            const q = document.getElementById('search').value.trim().toLowerCase();
+            const filtered = q
+                ? allFiles.filter(f =>
+                    f.namaSekolah.toLowerCase().includes(q) ||
+                    f.originalFilename.toLowerCase().includes(q)
+                )
+                : allFiles;
+
+            if (filtered.length === 0) {
+                document.getElementById('content').innerHTML =
+                    '<div class="empty">' +
+                    (allFiles.length === 0 ? 'Belum ada tanggapan masuk.' : 'Tidak ada hasil yang cocok.') +
+                    '</div>';
+                return;
+            }
+
+            const rows = filtered.map((f, i) => {
+                const d = new Date(f.uploadDate).toLocaleString('id-ID', {
+                    day: '2-digit', month: 'short', year: 'numeric',
+                    hour: '2-digit', minute: '2-digit'
+                });
+                const badge = f.fileType === 'PDF' ? 'badge-pdf' : 'badge-jpg';
+                return `
+                    <tr>
+                        <td>${i + 1}</td>
+                        <td><strong>${esc(f.namaSekolah)}</strong></td>
+                        <td>${esc(f.originalFilename)}</td>
+                        <td><span class="badge ${badge}">${f.fileType}</span></td>
+                        <td>${formatSize(f.size)}</td>
+                        <td>${d}</td>
+                        <td><a class="btn-dl" href="/api/download/${f.id}">Download</a></td>
+                    </tr>
+                `;
+            }).join('');
+
+            document.getElementById('content').innerHTML = `
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Nama Sekolah</th>
+                            <th>File</th>
+                            <th>Tipe</th>
+                            <th>Ukuran</th>
+                            <th>Tanggal</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>${rows}</tbody>
+                </table>
+            `;
+        }
+
+        function esc(s) {
+            const d = document.createElement('div');
+            d.textContent = s;
+            return d.innerHTML;
+        }
+
+        function formatSize(bytes) {
+            if (bytes === 0) return '0 B';
+            const k = 1024;
+            const sizes = ['B', 'KB', 'MB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
+        }
+
+        document.getElementById('search').addEventListener('input', render);
+        load();
+    </script>
+</body>
+</html>

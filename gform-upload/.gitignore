@@ -1,0 +1,4 @@
+uploads/
+submissions.json
+node_modules/
+*.log

@@ -1,0 +1,13 @@
+{
+  "name": "gform-upload",
+  "version": "1.0.0",
+  "description": "Form upload dokumen sekolah - tampilan simpel mirip Google Forms",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "license": "MIT"
+}
