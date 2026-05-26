@@ -1,0 +1,11 @@
+{
+  "name": "upload-form-sekolah",
+  "version": "1.0.0",
+  "description": "Form Upload Dokumen Sekolah - Upload PDF/JPG dengan nama sekolah",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "keywords": ["upload", "form", "sekolah", "pdf", "jpg"],
+  "license": "MIT"
+}
