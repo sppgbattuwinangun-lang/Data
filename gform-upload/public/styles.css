@@ -1,0 +1,327 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Roboto', 'Segoe UI', Arial, sans-serif;
+    background: #f0ebf8;
+    min-height: 100vh;
+    padding: 24px 12px;
+    color: #202124;
+    line-height: 1.5;
+}
+
+.page {
+    max-width: 640px;
+    margin: 0 auto;
+}
+
+/* ====== Card ====== */
+.form-card {
+    background: white;
+    border-radius: 8px;
+    padding: 24px;
+    margin-bottom: 12px;
+    border: 1px solid #dadce0;
+    border-top: 10px solid #673ab7;
+}
+
+.form-header {
+    border-bottom: 1px solid #e0e0e0;
+    padding-bottom: 24px;
+    margin-bottom: 18px;
+}
+
+.form-header h1 {
+    font-size: 28px;
+    font-weight: 400;
+    color: #202124;
+    margin-bottom: 8px;
+}
+
+.form-desc {
+    color: #5f6368;
+    font-size: 15px;
+    margin-bottom: 12px;
+}
+
+.required-note {
+    color: #d93025;
+    font-size: 13px;
+}
+
+.required {
+    color: #d93025;
+}
+
+/* ====== Question Card ====== */
+.question-card {
+    background: white;
+    border: 1px solid #dadce0;
+    border-radius: 8px;
+    padding: 20px 24px;
+    margin-bottom: 12px;
+    transition: box-shadow 0.2s;
+}
+
+.question-card:focus-within {
+    box-shadow: 0 1px 3px rgba(60, 64, 67, 0.15);
+    border-color: #673ab7;
+}
+
+.question-title {
+    display: block;
+    font-size: 16px;
+    color: #202124;
+    margin-bottom: 8px;
+    font-weight: 400;
+}
+
+.question-hint {
+    color: #5f6368;
+    font-size: 13px;
+    margin-bottom: 12px;
+}
+
+.question-input {
+    width: 100%;
+    padding: 8px 0;
+    border: none;
+    border-bottom: 1px solid #dadce0;
+    font-size: 15px;
+    color: #202124;
+    background: transparent;
+    outline: none;
+    transition: border-color 0.2s;
+    font-family: inherit;
+}
+
+.question-input:focus {
+    border-bottom: 2px solid #673ab7;
+    padding-bottom: 7px;
+}
+
+.question-input::placeholder {
+    color: #9aa0a6;
+}
+
+/* ====== File Upload ====== */
+.file-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 20px;
+    border: 1px solid #dadce0;
+    border-radius: 4px;
+    background: white;
+    color: #5f6368;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-top: 4px;
+}
+
+.file-button:hover {
+    background: #f8f9fa;
+    border-color: #d2d2d2;
+    box-shadow: 0 1px 2px rgba(60, 64, 67, 0.1);
+}
+
+.file-button-icon {
+    font-size: 18px;
+    color: #673ab7;
+    font-weight: 500;
+}
+
+.file-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #f1f3f4;
+    border-radius: 16px;
+    padding: 6px 8px 6px 12px;
+    margin-top: 12px;
+    max-width: 100%;
+}
+
+.file-chip-icon {
+    font-size: 16px;
+}
+
+.file-chip-name {
+    font-size: 14px;
+    color: #202124;
+    font-weight: 500;
+    max-width: 280px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.file-chip-size {
+    font-size: 12px;
+    color: #5f6368;
+}
+
+.file-chip-remove {
+    background: none;
+    border: none;
+    color: #5f6368;
+    cursor: pointer;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    transition: background 0.2s;
+}
+
+.file-chip-remove:hover {
+    background: rgba(0, 0, 0, 0.08);
+    color: #202124;
+}
+
+/* ====== Alert ====== */
+.alert-error {
+    background: #fce8e6;
+    color: #d93025;
+    padding: 12px 16px;
+    border-radius: 4px;
+    margin-bottom: 12px;
+    font-size: 14px;
+}
+
+/* ====== Actions ====== */
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin-top: 16px;
+    padding: 12px 0 4px;
+}
+
+.btn-submit {
+    background: #673ab7;
+    color: white;
+    border: none;
+    padding: 10px 24px;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+    min-width: 80px;
+}
+
+.btn-submit:hover {
+    background: #5e35b1;
+    box-shadow: 0 1px 3px rgba(60, 64, 67, 0.3);
+}
+
+.btn-submit:disabled {
+    background: #d2d2d2;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+.btn-link {
+    background: none;
+    border: none;
+    color: #673ab7;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    padding: 8px 0;
+    font-family: inherit;
+}
+
+.btn-link:hover {
+    text-decoration: underline;
+}
+
+/* ====== Form Footer ====== */
+.form-footer {
+    color: #5f6368;
+    font-size: 11px;
+    margin-top: 24px;
+    text-align: center;
+    padding-top: 16px;
+    border-top: 1px solid #e0e0e0;
+}
+
+/* ====== Thank You Screen ====== */
+.thank-icon {
+    width: 64px;
+    height: 64px;
+    background: #34a853;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 36px;
+    margin: 8px auto 24px;
+}
+
+#thankScreen h1 {
+    text-align: center;
+    font-size: 28px;
+    font-weight: 400;
+    color: #202124;
+    margin-bottom: 16px;
+}
+
+.thank-msg {
+    text-align: center;
+    color: #202124;
+    font-size: 15px;
+    margin-bottom: 8px;
+}
+
+.thank-sub {
+    text-align: center;
+    color: #5f6368;
+    font-size: 14px;
+    margin-bottom: 24px;
+}
+
+#thankScreen .form-actions {
+    justify-content: center;
+}
+
+/* ====== Page Footer ====== */
+.page-footer {
+    text-align: center;
+    color: #5f6368;
+    font-size: 12px;
+    margin-top: 16px;
+    padding: 8px;
+}
+
+/* ====== Responsive ====== */
+@media (max-width: 600px) {
+    body {
+        padding: 8px 0;
+    }
+
+    .form-card {
+        border-radius: 0;
+        border-left: none;
+        border-right: none;
+        padding: 20px 16px;
+    }
+
+    .form-header h1 {
+        font-size: 24px;
+    }
+
+    .question-card {
+        padding: 16px;
+    }
+}
