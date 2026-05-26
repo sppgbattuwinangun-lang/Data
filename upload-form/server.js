@@ -225,6 +225,35 @@ const server = http.createServer((req, res) => {
         return;
     }
 
+    // API: Preview file (inline, untuk modal detail)
+    if (req.method === 'GET' && url.pathname.startsWith('/api/preview/')) {
+        const fileId = url.pathname.replace('/api/preview/', '');
+        const fileInfo = uploadedFiles.find(f => f.id === fileId);
+
+        if (!fileInfo) {
+            res.writeHead(404, { 'Content-Type': 'application/json' });
+            res.end(JSON.stringify({ error: 'File tidak ditemukan' }));
+            return;
+        }
+
+        const filePath = path.join(UPLOAD_DIR, fileInfo.savedFilename);
+        if (!fs.existsSync(filePath)) {
+            res.writeHead(404, { 'Content-Type': 'application/json' });
+            res.end(JSON.stringify({ error: 'File tidak ditemukan di server' }));
+            return;
+        }
+
+        const mimeType = getMimeType(path.extname(fileInfo.savedFilename));
+        res.writeHead(200, {
+            'Content-Type': mimeType,
+            'Content-Disposition': `inline; filename="${fileInfo.originalFilename}"`,
+            'Content-Length': fs.statSync(filePath).size
+        });
+
+        fs.createReadStream(filePath).pipe(res);
+        return;
+    }
+
     // API: Download file
     if (req.method === 'GET' && url.pathname.startsWith('/api/download/')) {
         const fileId = url.pathname.replace('/api/download/', '');

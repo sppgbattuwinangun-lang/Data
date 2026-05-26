@@ -9,9 +9,38 @@
 <body>
     <div class="container">
         <header>
-            <h1>📄 Form Upload Dokumen Sekolah</h1>
+            <h1>Form Upload Dokumen Sekolah</h1>
             <p class="subtitle">Upload file PDF atau JPG dengan nama sekolah</p>
         </header>
+
+        <!-- Statistik Total -->
+        <div class="stats-grid" id="statsGrid">
+            <div class="stat-card stat-blue">
+                <div class="stat-label">Total File</div>
+                <div class="stat-value" id="statTotal">0</div>
+                <div class="stat-sub">file terupload</div>
+            </div>
+            <div class="stat-card stat-red">
+                <div class="stat-label">File PDF</div>
+                <div class="stat-value" id="statPdf">0</div>
+                <div class="stat-sub">dokumen</div>
+            </div>
+            <div class="stat-card stat-cyan">
+                <div class="stat-label">File JPG/JPEG</div>
+                <div class="stat-value" id="statJpg">0</div>
+                <div class="stat-sub">gambar</div>
+            </div>
+            <div class="stat-card stat-green">
+                <div class="stat-label">Total Sekolah</div>
+                <div class="stat-value" id="statSchools">0</div>
+                <div class="stat-sub">sekolah unik</div>
+            </div>
+            <div class="stat-card stat-purple">
+                <div class="stat-label">Total Ukuran</div>
+                <div class="stat-value" id="statSize">0 B</div>
+                <div class="stat-sub">total storage</div>
+            </div>
+        </div>
 
         <!-- Upload Form -->
         <div class="card upload-card">
@@ -24,8 +53,11 @@
                         id="namaSekolah" 
                         name="nama_sekolah" 
                         placeholder="Contoh: SDN 01 Menteng"
+                        list="schoolList"
+                        autocomplete="off"
                         required
                     >
+                    <datalist id="schoolList"></datalist>
                 </div>
 
                 <div class="form-group">
@@ -67,27 +99,66 @@
             </div>
         </div>
 
+        <!-- Ringkasan per Sekolah -->
+        <div class="card" id="schoolSummaryCard" style="display:none;">
+            <h2>Ringkasan per Sekolah</h2>
+            <div class="table-wrap">
+                <table class="summary-table">
+                    <thead>
+                        <tr>
+                            <th>Nama Sekolah</th>
+                            <th class="center">PDF</th>
+                            <th class="center">JPG</th>
+                            <th class="center">Total File</th>
+                            <th class="right">Total Ukuran</th>
+                        </tr>
+                    </thead>
+                    <tbody id="summaryTableBody"></tbody>
+                </table>
+            </div>
+        </div>
+
         <!-- File List -->
         <div class="card file-list-card">
-            <h2>📋 Daftar File yang Terupload</h2>
+            <div class="card-header">
+                <h2>Daftar File Terupload</h2>
+                <input type="text" id="searchInput" class="search-input" placeholder="Cari nama sekolah atau file..." />
+            </div>
             <div id="fileListLoading" class="loading">Memuat data...</div>
             <div id="emptyState" class="empty-state" style="display:none;">
                 <p>Belum ada file yang diupload</p>
             </div>
-            <table id="fileTable" style="display:none;">
-                <thead>
-                    <tr>
-                        <th>No</th>
-                        <th>Nama Sekolah</th>
-                        <th>Nama File</th>
-                        <th>Tipe</th>
-                        <th>Ukuran</th>
-                        <th>Tanggal Upload</th>
-                        <th>Aksi</th>
-                    </tr>
-                </thead>
-                <tbody id="fileTableBody"></tbody>
-            </table>
+            <div class="table-wrap">
+                <table id="fileTable" style="display:none;">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Nama Sekolah</th>
+                            <th>Nama File</th>
+                            <th>Tipe</th>
+                            <th class="right">Ukuran</th>
+                            <th>Tanggal Upload</th>
+                            <th class="center">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody id="fileTableBody"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Detail -->
+    <div id="detailModal" class="modal-bg" style="display:none;">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 id="detailTitle">Detail File</h2>
+                <button type="button" class="modal-close" id="closeDetail">✕</button>
+            </div>
+            <div class="modal-body" id="detailBody"></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" id="closeDetailBtn">Tutup</button>
+                <button type="button" class="btn btn-primary" id="downloadDetailBtn">⬇ Download</button>
+            </div>
         </div>
     </div>
 
