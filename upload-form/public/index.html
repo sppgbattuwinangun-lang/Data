@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form Upload Dokumen Sekolah</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📄 Form Upload Dokumen Sekolah</h1>
+            <p class="subtitle">Upload file PDF atau JPG dengan nama sekolah</p>
+        </header>
+
+        <!-- Upload Form -->
+        <div class="card upload-card">
+            <h2>Upload Dokumen</h2>
+            <form id="uploadForm">
+                <div class="form-group">
+                    <label for="namaSekolah">Nama Sekolah <span class="required">*</span></label>
+                    <input 
+                        type="text" 
+                        id="namaSekolah" 
+                        name="nama_sekolah" 
+                        placeholder="Contoh: SDN 01 Menteng"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="fileInput">Pilih File (PDF/JPG) <span class="required">*</span></label>
+                    <div class="file-drop-zone" id="dropZone">
+                        <div class="drop-icon">📁</div>
+                        <p>Drag & drop file di sini atau <span class="browse-link">klik untuk memilih</span></p>
+                        <p class="file-hint">Format yang diterima: PDF, JPG, JPEG (Maks. 10MB)</p>
+                        <input 
+                            type="file" 
+                            id="fileInput" 
+                            name="file" 
+                            accept=".pdf,.jpg,.jpeg"
+                            required
+                            hidden
+                        >
+                    </div>
+                    <div id="filePreview" class="file-preview" style="display:none;">
+                        <span id="fileName"></span>
+                        <span id="fileSize"></span>
+                        <button type="button" id="removeFile" class="btn-remove">✕</button>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary" id="submitBtn">
+                    <span class="btn-text">Upload File</span>
+                    <span class="btn-loading" style="display:none;">Mengunggah...</span>
+                </button>
+            </form>
+
+            <!-- Alert Messages -->
+            <div id="alertSuccess" class="alert alert-success" style="display:none;">
+                <span class="alert-icon">✅</span>
+                <span id="alertSuccessMsg"></span>
+            </div>
+            <div id="alertError" class="alert alert-error" style="display:none;">
+                <span class="alert-icon">❌</span>
+                <span id="alertErrorMsg"></span>
+            </div>
+        </div>
+
+        <!-- File List -->
+        <div class="card file-list-card">
+            <h2>📋 Daftar File yang Terupload</h2>
+            <div id="fileListLoading" class="loading">Memuat data...</div>
+            <div id="emptyState" class="empty-state" style="display:none;">
+                <p>Belum ada file yang diupload</p>
+            </div>
+            <table id="fileTable" style="display:none;">
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Nama Sekolah</th>
+                        <th>Nama File</th>
+                        <th>Tipe</th>
+                        <th>Ukuran</th>
+                        <th>Tanggal Upload</th>
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
+                <tbody id="fileTableBody"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 - Form Upload Dokumen Sekolah</p>
+    </footer>
+
+    <script src="/app.js"></script>
+</body>
+</html>
